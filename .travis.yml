@@ -14,7 +14,6 @@ script:
 - cp cover.png OEBPS/cover.png
 - zip -rX Dubliners.epub mimetype
 - zip -rX Dubliners.epub OEBPS/ META-INF/
-- zip -rX Dubliners.epub OEBPS/images/
 branches:
   only:
   - master
