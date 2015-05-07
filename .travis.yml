@@ -1,0 +1,29 @@
+language: ruby
+sudo: required
+before_install:
+- gem install asciidoctor tilt
+- sudo apt-get install xsltproc
+script:
+- git clone https://github.com/sethwoodworth/asciidoctor-htmlbook.git
+- asciidoctor -a toc -b xhtml5 -d book -T ./asciidoctor-htmlbook/htmlbook-autogen/
+  -d book Dubliners.asciidoc -o Dubliners.html
+- git clone https://github.com/sethwoodworth/HTMLBook
+- xsltproc -stringparam external.assets.list " " ./HTMLBook/htmlbook-xsl/epub.xsl
+  Dubliners.html
+- cp ./HTMLBook/stylesheets/epub/epub.css OEBPS
+- cp cover.png OEBPS/cover.png
+- mv ./images ./OEBPS/
+- zip -rX Dubliners.epub mimetype
+- zip -rX Dubliners.epub OEBPS/ META-INF/
+- zip -rX Dubliners.epub OEBPS/images/
+branches:
+  only:
+  - master
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: EssqJtNLkDIj4y8tug8dm5Gyjjra46aJfL7hWq3g5f/drjn/rc+LvXJb1yiJ0EkTEtTwNMjYCBJ5THIL+WbAavPapux8YtpKR5NmqMzWqhHDIK+Ph6qOH904BTEiX18nlXtHDnSYBZBvg+klZhHLSD/aTQ3MTwmVAe5Cxjf7VUAl++xV7V8THFZWqPlDLkEufVSmTBw92w6W1Lj81UXZTj6VsY2rjUKgRDmkFItRYK9ANPuArjfy2RnJXZW6WgijzQDyrLaxxPO7vpS6m54KkqGtTxZp6FY9jnXgooLnmTKvMATKfCGCuaczcEhv0uJd7/IEeHA0AhCvRByvq1Q3c2NNmsjr9U4dUWERuAG8VQCUWZyAdoRwAGxwhCrkMSr3co4PV7U1Q+dcl9/JeWkTsrnti5K8Jnj9YdSNKDA/82oiJatgo+UD3qYff+Fk6KRhrDJ0HyZEW+UQki2cNRr5BVzuuBpJY7xG/0gDfINNX6YegKEpQcmQRtYCPoEWEMAoM3jULDFI+kL9yYWgWM+RATY7kjVT1G+s6FY3RnwJJoaX5qQuiXdqbtxi5nFDRLjP9ieK7u/NFTGE0xOP4uJeIoVd3aublmQLxtKtENlRmeNcHnzHmSHKca1BfxkzP7mYVroRLou4BbMbVol1Kme7+/CC/nxnuf7CIOP3rRWQeNI=
+  file: Dubliners.epub
+  on:
+    repo: sethwoodworth/Dubliners_2814
