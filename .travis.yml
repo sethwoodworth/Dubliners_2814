@@ -12,7 +12,6 @@ script:
   Dubliners.html
 - cp ./HTMLBook/stylesheets/epub/epub.css OEBPS
 - cp cover.png OEBPS/cover.png
-- mv ./images ./OEBPS/
 - zip -rX Dubliners.epub mimetype
 - zip -rX Dubliners.epub OEBPS/ META-INF/
 - zip -rX Dubliners.epub OEBPS/images/
